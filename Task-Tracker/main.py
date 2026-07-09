@@ -1,59 +1,91 @@
-import argparse
 import sys
+import json 
+import os 
+from datetime import datetime
+
+
+# bagian task adding
+TASK_FILE = "tasks.json"
+
+def load_task():
+    if not os.path.exists(TASK_FILE):
+        return []
+    
+    with open(TASK_FILE, 'r') as f:
+        task = json.load(f)
+
+    return task
+
+
+def save_task(task):
+    with open(TASK_FILE, "w") as f:
+        json.dump(task, f, indent=4)
+
+
+
+def get_next_id(task):
+    if not task:
+        return 1
+    
+    return max([field['id'] for field in task])+1
+
+def add_task(description):
+    task = load_task()
+    new_id = get_next_id(task)
+
+    new_task = {
+        "id": new_id,
+        "description": description,
+        "status": "todo",
+        "createdAt": datetime.now().isoformat(),
+        "updatedAt": datetime.now().isoformat(),
+
+    }
+
+
+    task.append(new_task)
+    save_task(task)
+    print(f"task added successfully (ID: {new_id})✅")
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Kelola Tugas dari Terminal")
+    args = sys.argv[1:]
+    print(args)
 
-    subparsers = parser.add_subparsers(dest="command", help="Daftar Perintah")
+    if len(args) == 0:
+
+        return 
     
-    # Route add
-    add_parser = subparsers.add_parser("add", help="tambah tugas baru")
-    add_parser.add_argument("description", type=str, help="Deskripsi task yang ingin ditambahkan")
+    command = args[0]
 
-    # set up route update
-    update_parser = subparsers.add_parser("update", help="Update deskripsi task yang ada")
-    update_parser.add_argument("id", type=int, help="ID dari task")
-    update_parser.add_argument("description", type=str, help="deskripsi baru")
+    if command == "add":
+        try:
+            add_task(args[1])
 
-    # set up route delete
-    delete_parser = subparsers.add_parser("delete", help="Hapus task berdasarkan Id")
-    delete_parser.add_argument("id", type=int, help="Id dari task yang akan dihapus")
+        except:
+            print("masukkan task yang ingin ditambahkan")
+            print("example: add 'Buy groceries'")
 
-    # Set up route List task
-    list_task = subparsers.add_parser("list", help="Daftar Tugas")
-    list_task.add_argument("status", type=str, nargs="?", choices=['done', 'todo', 'in-progress'], help="Filter task berdasarkan status")
-
-    mark_in_progress_parser = subparsers.add_parser("mark-in-progress", help="Tanda task sedang dikerjakan")
-    mark_in_progress_parser.add_argument("id", type=int, help="ID dari task")
-
-    # route mark-done
-    mark_in_done_progress = subparsers.add_parser("mark-in-done", help="Tandai task sudah selesai")
-    mark_in_done_progress.add_argument("id", type=int, help="ID dari task")
-
-    args = parser.parse_args()
-
-    if args.command == "add":
-        print(f"[Aksi] Menambahkan task dengan deskripsi: '{args.description}'")
-
-    elif args.command == "update":
-        print(f"[Aksi] Menghapus task ID {args.id}")
-
-    elif args.command == "list":
-        if args.status:
-            print(f"[Aksi] Menampilkan task dengan status: {args.status}")
+    elif command == "list":
+        if len(args) > 1:
+            pass
         else:
-            print(f"[Aksi] Menampilkan semua task")
+            pass
 
-    elif args.command == "mark-in-progress":
-        print(f"[Aksi] Mengubah status task ID {args.id} menjadi in-progress")
+    elif command == "update":
+        pass
 
-    elif args.command == "mark-done":
-        print(f"[Aksi] Mengubah status task ID {args.id} menjadi done")
+    elif command == "delete":
+        pass
+
+    elif command == "mark-in-progress":
+        pass
+
+    elif command == "mark-done":
+        pass
 
     else:
-        parser.print_help()
-    
+        print("invalid command")
 
 
 if __name__ == "__main__":
