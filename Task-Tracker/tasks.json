@@ -1,17 +1,17 @@
 [
     {
         "id": 1,
-        "description": "Buy groceries",
+        "description": "buy some food",
         "status": "todo",
         "createdAt": "2026-07-08T10:03:15.292661",
-        "updatedAt": "2026-07-08T10:03:15.292845"
+        "updatedAt": "2026-07-10T20:58:29.441800"
     },
     {
         "id": 2,
-        "description": "hit the gym for 30 minutes",
+        "description": "get a glass of coffe",
         "status": "todo",
         "createdAt": "2026-07-08T10:05:36.246887",
-        "updatedAt": "2026-07-08T10:05:36.246900"
+        "updatedAt": "2026-07-10T20:59:07.435915"
     },
     {
         "id": 3,

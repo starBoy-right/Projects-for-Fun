@@ -48,6 +48,51 @@ def add_task(description):
     print(f"task added successfully (ID: {new_id})✅")
 
 
+# Bagian untuk update dan delete task
+# karena kedua task ini butuh mencari task sebagai target task, maka dibuat satu fungsi helper task pencarian
+
+def find_task_by_id(task_list, target_id):
+    if not task_list:
+        print("Task masih kosong")
+
+    else:
+
+        target_task = [field for field in task_list if field['id'] == int(target_id)]
+
+        if not target_task:
+            print("Task Tidak ditemukan")
+
+        else:
+            return target_task
+
+
+# fungsi update task -> menggunakan find_task_by_id function
+
+def update_task(task_id, new_description):
+    task = load_task()
+    found_task = find_task_by_id(task, task_id)
+
+    found_task[0]['description'] = new_description
+    found_task[0]['updatedAt'] = datetime.now().isoformat()
+
+    save_task(task)
+    print('Task Berhasil di Update ✅')
+
+
+# fungsi delete task -> menggunakan find_task_by_id function
+
+def delete_task(task_id):
+    tasks = load_task()
+    found_task = find_task_by_id(tasks, task_id)
+
+
+    tasks = [task for task in tasks if task['id'] != found_task[0]['id']]
+
+    save_task(tasks)
+    print("Berhasil Delete Task ✅")
+
+
+# main app
 def main():
     args = sys.argv[1:]
     print(args)
@@ -73,10 +118,18 @@ def main():
             pass
 
     elif command == "update":
-        pass
+        try:
+            update_task(args[1], args[2])
+
+        except:
+            print("Gagal Mengupdate Task")
 
     elif command == "delete":
-        pass
+        try:
+            delete_task(args[1])
+
+        except:
+            print("Gagal Delete Task")
 
     elif command == "mark-in-progress":
         pass
