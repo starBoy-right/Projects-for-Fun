@@ -89,7 +89,6 @@ def delete_task(task_id):
     print("Berhasil Delete Task ✅")
 
 
-
 # fungsi mark task (mark-in-progress, mark-done) --> menggunakan find_task_by_id function
 def mark_task(status_task, task_id):
     task = load_task()
@@ -145,7 +144,6 @@ def list_task(status_filter=None):
 # main app
 def main():
     args = sys.argv[1:]
-    print(args)
 
     if len(args) == 0:
 
