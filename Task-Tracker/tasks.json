@@ -2,22 +2,29 @@
     {
         "id": 1,
         "description": "buy some food",
-        "status": "todo",
+        "status": "done",
         "createdAt": "2026-07-08T10:03:15.292661",
-        "updatedAt": "2026-07-10T20:58:29.441800"
+        "updatedAt": "2026-07-11T14:03:39.049690"
     },
     {
         "id": 2,
         "description": "get a glass of coffe",
-        "status": "todo",
+        "status": "in-progress",
         "createdAt": "2026-07-08T10:05:36.246887",
-        "updatedAt": "2026-07-10T20:59:07.435915"
+        "updatedAt": "2026-07-11T14:04:05.205382"
     },
     {
         "id": 3,
         "description": "do the homework at night",
-        "status": "todo",
+        "status": "in-progress",
         "createdAt": "2026-07-08T10:14:36.914564",
-        "updatedAt": "2026-07-08T10:14:36.914578"
+        "updatedAt": "2026-07-11T14:04:22.171915"
+    },
+    {
+        "id": 4,
+        "description": "read a book",
+        "status": "in-progress",
+        "createdAt": "2026-07-11T14:04:39.414857",
+        "updatedAt": "2026-07-11T14:26:38.491428"
     }
 ]

@@ -4,9 +4,10 @@ import os
 from datetime import datetime
 
 
-# bagian task adding
+
 TASK_FILE = "tasks.json"
 
+# bagian task adding
 def load_task():
     if not os.path.exists(TASK_FILE):
         return []
@@ -22,12 +23,12 @@ def save_task(task):
         json.dump(task, f, indent=4)
 
 
-
 def get_next_id(task):
     if not task:
         return 1
     
     return max([field['id'] for field in task])+1
+
 
 def add_task(description):
     task = load_task()
@@ -50,7 +51,6 @@ def add_task(description):
 
 # Bagian untuk update dan delete task
 # karena kedua task ini butuh mencari task sebagai target task, maka dibuat satu fungsi helper task pencarian
-
 def find_task_by_id(task_list, target_id):
     if not task_list:
         print("Task masih kosong")
@@ -67,7 +67,6 @@ def find_task_by_id(task_list, target_id):
 
 
 # fungsi update task -> menggunakan find_task_by_id function
-
 def update_task(task_id, new_description):
     task = load_task()
     found_task = find_task_by_id(task, task_id)
@@ -80,16 +79,67 @@ def update_task(task_id, new_description):
 
 
 # fungsi delete task -> menggunakan find_task_by_id function
-
 def delete_task(task_id):
     tasks = load_task()
     found_task = find_task_by_id(tasks, task_id)
-
 
     tasks = [task for task in tasks if task['id'] != found_task[0]['id']]
 
     save_task(tasks)
     print("Berhasil Delete Task ✅")
+
+
+
+# fungsi mark task (mark-in-progress, mark-done) --> menggunakan find_task_by_id function
+def mark_task(status_task, task_id):
+    task = load_task()
+    found_task = find_task_by_id(task, task_id)
+
+    if not found_task:
+        print("Task Tidak Ditemukan")
+
+    if status_task == 'mark-in-progress':
+        found_task[0]['status'] = 'in-progress'
+        found_task[0]['updatedAt'] = datetime.now().isoformat()
+
+        save_task(task)
+        print("Status Task berhasil diubah (in-progress)✅")
+
+    elif status_task == "mark-done":
+        found_task[0]['status'] = 'done'
+        found_task[0]['updatedAt'] = datetime.now().isoformat()
+
+        save_task(task)
+        print("Status Task berhasil diubah (done)✅")
+    
+
+# Fungsi List Task (todo - in progress - done)
+def list_task(status_filter=None):
+    task = load_task()
+
+    if not task:
+        print("Task Kosong")
+    
+    else:
+
+        if status_filter == "todo":
+            todo_task = [field for field in task if field['status'] == 'todo']
+            for task in todo_task:
+                print(f"{task['id']}. {task['description']} | {task['status']}")
+
+        elif status_filter == "done":
+            done_task = [field for field in task if field['status'] == 'done']
+            for task in done_task:
+                print(f"{task['id']}. {task['description']} | {task['status']}")
+
+        elif status_filter == "in-progress":
+            in_progress_task = [field for field in task if field['status'] == "in-progress"]
+            for task in in_progress_task:
+                print(f"{task['id']}. {task['description']} | {task['status']}")
+
+        else:
+            for tsk in task:
+                print(f"{tsk['id']}. {tsk['description']} | {tsk['status']}")
 
 
 # main app
@@ -113,9 +163,13 @@ def main():
 
     elif command == "list":
         if len(args) > 1:
-            pass
+            list_task(args[1])
         else:
-            pass
+            try:
+                list_task()
+
+            except:
+                print("Gagal Eksekusi List Task")
 
     elif command == "update":
         try:
@@ -132,10 +186,18 @@ def main():
             print("Gagal Delete Task")
 
     elif command == "mark-in-progress":
-        pass
+        try:
+            mark_task(args[0], args[1])
+        
+        except:
+            print("Gagal mark-in-progress Task")
 
     elif command == "mark-done":
-        pass
+        try:
+            mark_task(args[0], args[1])
+        
+        except:
+            print("Gagal mark-done task")
 
     else:
         print("invalid command")
